@@ -6,8 +6,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float speed = 20;
-    [SerializeField] private float rotationSpeed = 20;
-
+    [SerializeField] private Vector3 rotationSpeed;
     [SerializeField] private float jumpForce = 2f;
 
     private Vector3 jump;
@@ -16,10 +15,6 @@ public class PlayerController : MonoBehaviour
     private float movementX;
     private float movementY;
     private float rotationX;
-    private float rotationY;
-    Vector3 m_EulerAngleVelocity;
-
-
 
     // Start is called before the first frame update
     void Start()
@@ -29,24 +24,24 @@ public class PlayerController : MonoBehaviour
         isGrounded = true;
 
         //Set the angular velocity of the Rigidbody (rotating around the Y axis, 100 deg/sec)
-        m_EulerAngleVelocity = new Vector3(0, 100, 0);
+        rotationSpeed = new Vector3(0, 50, 0);
     }
 
     void FixedUpdate() 
     {
         Move();
         Rotate();
-
     }
 
     private void Move() {
         Vector3 movement = new Vector3(movementX, 0.0f, movementY).normalized;
-        transform.Translate(movement * speed * Time.deltaTime);
+        
+        rb.AddRelativeForce(transform.forward + movement * speed);
     }
 
     private void Rotate() 
     {
-        Quaternion deltaRotation = Quaternion.Euler(m_EulerAngleVelocity * Time.fixedDeltaTime * rotationX);
+        Quaternion deltaRotation = Quaternion.Euler(rotationSpeed * Time.deltaTime * rotationX);
         rb.MoveRotation(rb.rotation * deltaRotation);
     }
     void OnMove(InputValue movementValue)  
@@ -70,7 +65,6 @@ public class PlayerController : MonoBehaviour
         Vector2 rotationVector = rotationValue.Get<Vector2>();
 
         rotationX = rotationVector.x; 
-        rotationY = rotationVector.y;   
     }
     
     void OnCollisionStay()
