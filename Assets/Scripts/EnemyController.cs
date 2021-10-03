@@ -29,21 +29,12 @@ public class EnemyController : MonoBehaviour
     private void FixedUpdate() 
     {
         Move();
-        Rotate();
     }
 
     private void Move() {
         if (inRange) {
             transform.position += transform.forward * speed * Time.deltaTime;
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(player.position - transform.position), 3 * Time.deltaTime);
-        }
-    }
-
-    private void Rotate() 
-    {   
-        if (inRange) {
-            Quaternion deltaRotation = Quaternion.Euler(rotationSpeed * Time.deltaTime * player.position.x);
-            rb.MoveRotation(rb.rotation * deltaRotation);
         }
     }
 }
