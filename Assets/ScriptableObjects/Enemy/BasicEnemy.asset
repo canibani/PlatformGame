@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45bc6ad3c55fcd84da30f445f22632b7, type: 3}
   m_Name: BasicEnemy
   m_EditorClassIdentifier: 
-  maxChasingDistance: 10
-  targetLockDistance: 5
-  speed: 2
+  maxChasingDistance: 100
+  targetLockDistance: 20
+  speed: 20

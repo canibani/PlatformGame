@@ -6,47 +6,55 @@ public class EnemyController : MonoBehaviour
 {
     [SerializeField] private Enemy enemy;
     [SerializeField] private Transform player;
-    [SerializeField] private float speed = 5;
 
-    private bool inRange;
+    private bool chasing;
+    private bool targetLock;
     private Rigidbody rb;
     
     void Start()
     { 
         rb = GetComponent<Rigidbody>();
-        inRange = false;
+        chasing = false;
+        targetLock = false; 
     }
 
     private void Update() {
-         if (Vector3.Distance(transform.position, player.position) <= enemy.maxChasingDistance) {
-            inRange = true;
-        } else {
-            inRange = false;
-        }
+        CheckState();
     }
 
     private void FixedUpdate() 
     {
         Move();
+        if (targetLock) {
+            CreateGravityInversionField();
+        }
     }
 
-    private void Move() {
-        Vector3 direction = (player.transform.position - transform.position);
-        rb.AddForce(transform.forward + direction * speed * Time.deltaTime);
+    private void Move() 
+    {
+        if (chasing && !targetLock) {
+            rb.AddForce(transform.forward * enemy.speed);
+        }
         transform.LookAt(player);
-
     }
 
     // This function should switch the state based on the enemy's distance from the player.
-    // Chasing when the distance is less then x
-    // TargetLock when the distance is less then targetDistance
-    /*private void CheckState() {
-
-
-        if (Vector3.Distance(transform.position, player.position) <= enemy.targetDistance) {
-            inRange = true;
-        } else {
-            inRange = false;
+    // Chasing when the distance is less then maxChasingDistance
+    // TargetLock when the distance is less then targetLockDistance
+    private void CheckState() 
+    {
+        if (Vector3.Distance(transform.position, player.position) <= enemy.maxChasingDistance) {
+            chasing = true;
+        } else { 
+            chasing = false;
         }
-    }*/
+        if (Vector3.Distance(transform.position, player.position) <= enemy.targetLockDistance) {
+            targetLock = true;
+        } else {
+            targetLock = false;
+        }
+    }
+
+    private void CreateGravityInversionField() {
+    }
 }
