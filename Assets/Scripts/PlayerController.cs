@@ -5,10 +5,9 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float speed = 20;
+    [SerializeField] private float speed;
     [SerializeField] private Vector3 rotationSpeed;
-    [SerializeField] private float jumpForce = 2f;
-
+    private float jumpForce = 2f;
     private Vector3 jump;
     private bool isGrounded = true;
     private Rigidbody rb;
@@ -16,34 +15,29 @@ public class PlayerController : MonoBehaviour
     private float movementY;
     private float rotationX;
 
-    // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         jump = new Vector3(0.0f, 2.0f, 0.0f);
         isGrounded = true;
 
-        //Set the angular velocity of the Rigidbody (rotating around the Y axis, 100 deg/sec)
         rotationSpeed = new Vector3(0, 50, 0);
     }
 
     void FixedUpdate() 
     {
         Move();
-        Rotate();
     }
 
     private void Move() {
         Vector3 movement = new Vector3(movementX, 0.0f, movementY).normalized;
-        
-        rb.AddRelativeForce(transform.forward + movement * speed);
-    }
 
-    private void Rotate() 
-    {
+        rb.AddRelativeForce(transform.forward + movement * speed);
+
         Quaternion deltaRotation = Quaternion.Euler(rotationSpeed * Time.deltaTime * rotationX);
         rb.MoveRotation(rb.rotation * deltaRotation);
     }
+    
     void OnMove(InputValue movementValue)  
     { 
         Vector2 movementVector = movementValue.Get<Vector2>();
