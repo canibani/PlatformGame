@@ -33,17 +33,13 @@ public class PlatformMover : MonoBehaviour
     }
     
     private void OnTriggerEnter(Collider other) {
-        if (other.gameObject.tag == "Player") {
-                        Debug.Log("test");
-
+        if (other.transform.parent.tag == "Player") {
             other.transform.parent = transform;
         }
     }
 
     private void OnTriggerExit(Collider other) {
-        if (other.gameObject.tag == "Player") {
-                        Debug.Log("test");
-
+        if (other.transform.parent.tag == "Player") {
             other.transform.parent = null;
         }
     }
