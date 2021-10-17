@@ -19,14 +19,18 @@ public class InverseGravity : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other) {
-        if (other.transform.parent.tag == "Player") {
-            player = other.transform.parent.GetComponent<Rigidbody>();
+        if (other.transform.parent != null) {
+            if (other.transform.parent.tag == "Player") {
+                player = other.transform.parent.GetComponent<Rigidbody>();
+            }
         }
     }
 
     private void OnTriggerExit(Collider other) {
-        if (other.transform.parent.tag == "Player") {
-            player = null;
+        if (other.transform.parent != null) {
+            if (other.transform.parent.tag == "Player") {
+                player = null;
+            }
         }
     }
 }

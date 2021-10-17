@@ -8,4 +8,5 @@ public class Enemy : ScriptableObject
     public float maxChasingDistance;
     public float targetLockDistance;
     public float speed;
+    public int lives;
 }

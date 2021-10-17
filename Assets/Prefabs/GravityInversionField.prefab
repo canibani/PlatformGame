@@ -13,8 +13,9 @@ GameObject:
   - component: {fileID: 7517430215729562498}
   - component: {fileID: 7517430215729562499}
   - component: {fileID: 7517430215729562511}
+  - component: {fileID: -9011593299604005414}
   m_Layer: 0
-  m_Name: CapsuleCollider
+  m_Name: GravityInversionField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -109,5 +110,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23bf8336fd5200547976a030a112b284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  launchSpeed: 20
+  launchSpeed: 15
   delay: 5
+--- !u!54 &-9011593299604005414
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7517430215729562496}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0

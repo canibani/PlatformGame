@@ -5,56 +5,64 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] private Enemy enemy;
-    [SerializeField] private Transform player;
+    [SerializeField] private GameObject gravityInversionField;
+    [SerializeField] private float targetLockDelay;
 
-    private bool chasing;
-    private bool targetLock;
     private Rigidbody rb;
-    
+    private Transform player;
+    private int lives;
+    private float knockbackStrength;
+
     void Start()
     { 
         rb = GetComponent<Rigidbody>();
-        chasing = false;
-        targetLock = false; 
+        lives = enemy.lives;
+        knockbackStrength = 1000;
+        player = GameObject.Find("Player").transform;
+        StartCoroutine(Chasing());
     }
-
     private void Update() {
-        CheckState();
-    }
-
-    private void FixedUpdate() 
-    {
-        Move();
-        if (targetLock) {
-            CreateGravityInversionField();
+        if (lives <= 0) {
+            Destroy(gameObject);
         }
     }
-
+    
     private void Move() 
     {
-        if (chasing && !targetLock) {
-            rb.AddForce(transform.forward * enemy.speed);
-        }
-        transform.LookAt(player);
+        rb.AddForce(transform.forward * enemy.speed);
+        
+        transform.LookAt(player.transform);
     }
 
-    // This function should switch the state based on the enemy's distance from the player.
-    // Chasing when the distance is less then maxChasingDistance
-    // TargetLock when the distance is less then targetLockDistance
-    private void CheckState() 
-    {
-        if (Vector3.Distance(transform.position, player.position) <= enemy.maxChasingDistance) {
-            chasing = true;
-        } else { 
-            chasing = false;
-        }
-        if (Vector3.Distance(transform.position, player.position) <= enemy.targetLockDistance) {
-            targetLock = true;
-        } else {
-            targetLock = false;
-        }
-    }
 
     private void CreateGravityInversionField() {
+        GameObject gif = Instantiate(gravityInversionField, player.transform.position + transform.up * 5, Quaternion.identity);
+    }
+
+    IEnumerator Chasing() {
+        while (Vector3.Distance(transform.position, player.transform.position) >= enemy.targetLockDistance) {
+            Move();
+            yield return null;
+        }
+        
+        StartCoroutine(TargetLock());
+
+    }
+
+    IEnumerator TargetLock() {
+        CreateGravityInversionField();
+
+        yield return new WaitForSeconds(targetLockDelay);
+
+        StartCoroutine(Chasing());
+    }
+
+    private void OnCollisionEnter(Collision other) {
+        if (other.gameObject.tag == "Bullet") {
+            Vector3 knockback = transform.position - other.transform.position;
+            knockback.y = 0;
+            rb.AddForce(knockback * knockbackStrength, ForceMode.Force);
+            lives--;
+        }
     }
 }

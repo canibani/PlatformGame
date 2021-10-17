@@ -256,8 +256,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a543e8b57127794c8495100ca96df63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy: {fileID: 11400000, guid: 84fe2fd88ab1bf342806cc8a2a7fc287, type: 2}
-  player: {fileID: 3270561631472202058, guid: c0fbbf5f091bc534cbd4ae9c0576cbc5, type: 3}
+  enemy: {fileID: 11400000, guid: 39af6874f7cf1694d8bd84431cd13a37, type: 2}
+  player: {fileID: 0}
+  gravityInversionField: {fileID: 7517430215729562496, guid: 8bf0a29867a16014fa39ebf92f5d0122, type: 3}
 --- !u!1 &9093771393442508163
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,27 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float speed;
-    [SerializeField] private Vector3 rotationSpeed;
-    private float jumpForce = 2f;
-    private Vector3 jump;
-    private bool isGrounded = true;
+    [SerializeField] private float jumpForce;
+    [SerializeField] private float rotationSpeed;
+    [SerializeField] private GameObject bullet;
+    [SerializeField] private int maxNoOfBullets;
+
     private Rigidbody rb;
+    private bool isGrounded;
     private float movementX;
     private float movementY;
-    private float rotationX;
+    private float rotation;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        jump = new Vector3(0.0f, 2.0f, 0.0f);
         isGrounded = true;
-
-        rotationSpeed = new Vector3(0, 50, 0);
     }
 
     void FixedUpdate() 
@@ -29,12 +26,13 @@ public class PlayerController : MonoBehaviour
         Move();
     }
 
-    private void Move() {
+    private void Move() 
+    {
         Vector3 movement = new Vector3(movementX, 0.0f, movementY).normalized;
 
         rb.AddRelativeForce(transform.forward + movement * speed);
 
-        Quaternion deltaRotation = Quaternion.Euler(rotationSpeed * Time.deltaTime * rotationX);
+        Quaternion deltaRotation = Quaternion.Euler(new Vector3(0, rotation, 0) * rotationSpeed * Time.deltaTime);
         rb.MoveRotation(rb.rotation * deltaRotation);
     }
     
@@ -48,9 +46,9 @@ public class PlayerController : MonoBehaviour
 
     void OnJump()
     {
-        if(isGrounded){
-            rb.AddForce(jump * jumpForce, ForceMode.Impulse);
+        if(isGrounded) {
             isGrounded = false;
+            rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
         }
     }
 
@@ -58,7 +56,15 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 rotationVector = rotationValue.Get<Vector2>();
 
-        rotationX = rotationVector.x; 
+        rotation = rotationVector.x;
+    }
+
+    void OnFire() 
+    {
+        if (GameObject.FindGameObjectsWithTag("Bullet").Length < maxNoOfBullets) {
+            Vector3 gun = transform.position + transform.forward * 2 + transform.up * 2;
+            Instantiate(bullet, gun, transform.rotation);
+        }
     }
     
     void OnCollisionStay()
