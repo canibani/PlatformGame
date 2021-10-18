@@ -19,7 +19,7 @@ public class EnemyController : MonoBehaviour
         lives = enemy.lives;
         knockbackStrength = 1000;
         player = GameObject.Find("Player").transform;
-        StartCoroutine(Chasing());
+        StartCoroutine(Wandering());
     }
     private void Update() {
         if (lives <= 0) {
@@ -27,11 +27,13 @@ public class EnemyController : MonoBehaviour
         }
     }
     
-    private void Move() 
+    private void Chase() 
     {
         rb.AddForce(transform.forward * enemy.speed);
-        
-        transform.LookAt(player.transform);
+
+        Vector3 lookAtPlayer = player.transform.position;
+        lookAtPlayer.y = transform.position.y;
+        transform.LookAt(lookAtPlayer);
     }
 
 
@@ -39,9 +41,18 @@ public class EnemyController : MonoBehaviour
         GameObject gif = Instantiate(gravityInversionField, player.transform.position + transform.up * 5, Quaternion.identity);
     }
 
+    IEnumerator Wandering() {
+        while (Vector3.Distance(transform.position, player.transform.position) >= enemy.maxChasingDistance) {
+            // Do nothing, didn't want to implement the enemy wandering
+            yield return null;
+        }
+
+        StartCoroutine(Chasing());
+    }
+
     IEnumerator Chasing() {
         while (Vector3.Distance(transform.position, player.transform.position) >= enemy.targetLockDistance) {
-            Move();
+            Chase();
             yield return null;
         }
         
@@ -54,7 +65,7 @@ public class EnemyController : MonoBehaviour
 
         yield return new WaitForSeconds(targetLockDelay);
 
-        StartCoroutine(Chasing());
+        StartCoroutine(Wandering());
     }
 
     private void OnCollisionEnter(Collision other) {
