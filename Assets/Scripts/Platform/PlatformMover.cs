@@ -5,31 +5,31 @@ public class PlatformMover : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private Vector3 target;
     private Rigidbody rb;
-    private Vector3 currentDirection;
     private Vector3 currentTarget;
     private Vector3 startingPosition;
+    
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         startingPosition = rb.position; 
-        currentDirection = target - rb.position;
         currentTarget = target;
     }
 
     void FixedUpdate()
     {
-        Move();     
+        Move();
     }
 
     private void Move() {
-        // I would like to change this at some point such that given a number for speed, all platforms move at the same speed.
-        // Currently it moves quicker, the further the distance it travels.
-        // This solution gives me the ability to create diagonally moving platforms.
-        rb.MovePosition(rb.position + speed * currentDirection * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(rb.position, currentTarget, speed * Time.deltaTime);
+
         if (rb.position == currentTarget) {
-            currentDirection = currentDirection * -1;
-            currentTarget = rb.position == target ? startingPosition: target;
-        } 
+            Vector3 tempStartingPosition = startingPosition;
+            Vector3 tempCurrentTarget = currentTarget;
+
+            currentTarget = tempStartingPosition;
+            startingPosition = tempCurrentTarget;
+        }
     }
 
     private void OnTriggerEnter(Collider other) {

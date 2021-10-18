@@ -67,8 +67,15 @@ public class PlayerController : MonoBehaviour
         }
     }
     
-    void OnCollisionStay()
+    void OnCollisionStay(Collision other)
     {
-        isGrounded = true;
+        if (other.gameObject.tag == "Plane") {
+            isGrounded = true;
+        }
+    }
+    private void OnCollisionExit(Collision other) {
+        if (other.gameObject.tag == "Plane") {
+            isGrounded = false;
+        }
     }
 }

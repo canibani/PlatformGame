@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45bc6ad3c55fcd84da30f445f22632b7, type: 3}
-  m_Name: BasicEnemy
+  m_Name: Enemy2
   m_EditorClassIdentifier: 
-  maxChasingDistance: 25
+  maxChasingDistance: 100
   targetLockDistance: 10
-  targetLockDelay: 5
-  speed: 1.5
+  targetLockDelay: 10
+  speed: 1
   lives: 3

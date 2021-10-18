@@ -1,13 +1,10 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] private Enemy enemy;
     [SerializeField] private GameObject gravityInversionField;
-    [SerializeField] private float targetLockDelay;
-
     private Rigidbody rb;
     private Transform player;
     private int lives;
@@ -63,7 +60,7 @@ public class EnemyController : MonoBehaviour
     IEnumerator TargetLock() {
         CreateGravityInversionField();
 
-        yield return new WaitForSeconds(targetLockDelay);
+        yield return new WaitForSeconds(enemy.targetLockDelay);
 
         StartCoroutine(Wandering());
     }
